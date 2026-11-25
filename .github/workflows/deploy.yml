@@ -1,19 +1,15 @@
 name: Desplegar Tarjeta en GitHub Pages
 
 on:
-  # Se ejecuta cada vez que haces push a la rama main
   push:
     branches: ["main"]
-  # Permite ejecutarlo manualmente desde la pestaña Actions
   workflow_dispatch:
 
-# Permisos necesarios para publicar en GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Evita despliegues simultáneos que choquen entre sí
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -34,7 +30,6 @@ jobs:
       - name: Subir archivos estáticos como artefacto
         uses: actions/upload-pages-artifact@v3
         with:
-          # Publica toda la raíz del repositorio (donde está index.html)
           path: '.'
 
       - name: Desplegar a GitHub Pages
