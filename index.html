@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>¡Feliz Cumpleaños, Carlos Salazar! - Equipo Cognitive</title>
     <!-- Tailwind CSS para diseño responsivo y utilidades -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,11 +13,23 @@
     <style>
         /* Configuración de tipografía y estilos base */
         body {
+            height: 100vh;
+            height: 100dvh;
             font-family: 'Inter', sans-serif;
             background: radial-gradient(circle at center, #0f172a 0%, #050814 70%, #02040a 100%);
             overflow: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        .safe-area-bottom {
+            padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+        }
+
+        @media (min-width: 640px) {
+            .safe-area-bottom {
+                padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+            }
         }
 
         .font-festive {
@@ -155,7 +167,7 @@
         }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col justify-between items-center relative text-white">
+<body class="w-screen flex flex-col justify-between items-center relative text-white">
 
     <!-- Lienzo principal de fuegos artificiales -->
     <canvas id="fireworksCanvas"></canvas>
@@ -216,7 +228,7 @@
     </main>
 
     <!-- Controles tipo reproductor de video en la parte inferior -->
-    <footer class="relative z-20 w-full max-w-xl px-4 pb-4 sm:pb-6">
+    <footer aria-label="Controles de la presentación" class="safe-area-bottom relative z-20 w-full max-w-xl px-4">
         <div class="bg-slate-900/75 backdrop-blur-xl border border-white/15 rounded-2xl p-3 sm:p-3.5 shadow-2xl">
             <!-- Barra de progreso de la presentación -->
             <div class="w-full h-1.5 bg-slate-700/80 rounded-full overflow-hidden mb-3">
@@ -242,6 +254,7 @@
                 <button
                     id="playPauseBtn"
                     type="button"
+                    aria-pressed="false"
                     class="min-w-0 min-h-11 flex-1 sm:flex-none inline-flex items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/30 active:scale-95 text-[11px] sm:text-sm font-medium text-amber-200 transition cursor-pointer whitespace-nowrap"
                     title="Pausar o reanudar fuegos artificiales"
                 >
@@ -258,6 +271,7 @@
                 <button
                     id="musicBtn"
                     type="button"
+                    aria-pressed="false"
                     class="min-w-0 min-h-11 flex-1 sm:flex-none inline-flex items-center justify-center gap-1 sm:gap-2 px-1.5 sm:px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 active:scale-95 text-[11px] sm:text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/25 transition cursor-pointer whitespace-nowrap"
                     title="Activar o silenciar melodía de cumpleaños"
                 >
@@ -824,6 +838,7 @@
 
         function toggleMusic() {
             audioEnabled = !audioEnabled;
+            musicBtn.setAttribute('aria-pressed', String(audioEnabled));
             if (audioEnabled) {
                 initAudioContext();
                 soundOffIcon.classList.add('hidden');
@@ -844,6 +859,7 @@
         replayBtn.addEventListener('click', () => {
             if (isPaused) {
                 isPaused = false;
+                playPauseBtn.setAttribute('aria-pressed', 'false');
                 pauseIcon.classList.remove('hidden');
                 playIcon.classList.add('hidden');
                 playPauseText.textContent = 'Pausar';
@@ -860,6 +876,7 @@
 
         playPauseBtn.addEventListener('click', () => {
             isPaused = !isPaused;
+            playPauseBtn.setAttribute('aria-pressed', String(isPaused));
             if (isPaused) {
                 pauseIcon.classList.add('hidden');
                 playIcon.classList.remove('hidden');
